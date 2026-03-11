@@ -89,3 +89,9 @@ This will bring your Git repository into a detached HEAD state (you aren't on a 
 ```
 git switch -c my-lesson-NN-solution
 ```
+
+## Lesson 01 - Everything Is an Object
+
+In this exercise, we start from a very simple class, which exposes several properties. All properties require validation, and so it sneaks into the class, making it unbearably complex. And, on top of complexity, we find out that great deal of validation logic is repeatable. We will need to add it to numerous other classes in the code base, too.
+
+The way out from this unwanted situation will be in understanding that all concepts in a business application warrant a type of their own. Validation, transforms, state management - all that belongs in the type that represents a concept. Any other type would simply contain an instance of the other type and, in that way, gain access to all these.
