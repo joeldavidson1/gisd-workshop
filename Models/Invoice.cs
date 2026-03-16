@@ -1,31 +1,22 @@
 namespace Gisd.Models;
 
-public class Invoice(
-    InvoiceNumber number, Company issuedTo,
-    DateOnly serviceOn, DateOnly issuedOn, Currency currency)
+public abstract class Invoice(Company issuedTo, DateOnly serviceOn, Currency currency, bool isAdvance)
 {
-    public InvoiceNumber Number { get; set; } = number;
-    
-    public Company IssuedTo { get; set; } = issuedTo;
-    
-    public DateOnly ServiceOn
-    {
-        get => field;
-        set => field =
-            value <= DateOnly.FromDateTime(DateTime.Now) ? value
-            : throw new ArgumentException("Service date cannot be in the future.");
-    } = serviceOn;
+    // RULE #2: PREFER BOOL AS AN ANSWER, NOT AS A STATE
 
-    public DateOnly IssuedOn
-    {
-        get => field;
-        set => field =
-            value <= DateOnly.FromDateTime(DateTime.Now) ? value
-            : throw new ArgumentException("Issued date cannot be in the future.");
-    } = issuedOn;
-    
-    public Currency Currency { get; set; } = currency;
+    public Company IssuedTo { get; } = issuedTo;
 
-    private List<InvoiceItem> ItemsRepresentation { get; } = new();
+    public bool IsAdvance { get; } = isAdvance;
+    
+    public virtual DateOnly ServiceOn { get; protected set; } = AsValidServiceDate(serviceOn, isAdvance);
+
+    protected static DateOnly AsValidServiceDate(DateOnly serviceOn, bool isAdvance) =>
+        serviceOn <= DateOnly.FromDateTime(DateTime.Now) ? serviceOn
+        : isAdvance ? serviceOn
+        : throw new ArgumentException("Service date cannot be in the future.");
+
+    public virtual Currency Currency { get; protected set; } = currency;
+
+    protected List<InvoiceItem> ItemsRepresentation { get; } = new();
     public IReadOnlyList<InvoiceItem> Items => ItemsRepresentation.AsReadOnly();
 }
