@@ -103,3 +103,11 @@ In this exercise, we analyze what happens when a single class does two things. A
 This situation is bad on several accounts. Branching around the object's state becomes omnipresent in many methods, needlessly cluttering code and complicating control flow. Methods now have a tendency to throw exceptions, indicating that they are not truly doing what their name communicates. Last but not least, there will inevitably be a combinatorial explosion of tests that now must cover all the combinations of meanings the object might have.
 
 The solution to this problem is in polymorphism. The simplest of all implementations (not always the best one, though) is to split the class into several variants via class inheritance. As the result, all control flows will be straightforward again, and with no superficial branching. The branching will be done by selecting one concrete type or the other.
+
+## Lesson 03 - Implement Defensive Design
+
+In this exercise, we observe the complexity that sneaks into a class implementation, often in form of branching instructions and the use of boolean flags. Such code often defends through throwing exceptions in a rigid control flow. Subsequent rqeuirements are hard to implement due to the complex control flow incurred by the defensive branching.
+
+The solution to this problem is to offload defense to strategies and to the compiler. We choose compile-time analysis every time when there is an option to describe the constraints with types. Let an invalid state impossible via the typed assignment checks.
+
+The remaining verifications and validations can be offloaded to dynamically injected stategies and delegates. The defending class would invoke the strategies to obtain valid state, without knowing what "valid" means in terms of business rules. This coding pattern allows us to inject different concrete strategies depending on the deployment, application request, and other contextual information, while keeping the class implementation complexity at a minimum.

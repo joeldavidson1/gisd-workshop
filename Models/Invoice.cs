@@ -2,8 +2,6 @@ namespace Gisd.Models;
 
 public abstract class Invoice(Company issuedTo, DateOnly serviceOn, Currency currency, bool isAdvance)
 {
-    // RULE #2: PREFER BOOL AS AN ANSWER, NOT AS A STATE
-
     public Company IssuedTo { get; } = issuedTo;
 
     public bool IsAdvance { get; } = isAdvance;

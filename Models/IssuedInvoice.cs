@@ -9,6 +9,6 @@ public class IssuedInvoice(
 
     public DateOnly IssuedOn { get; } =
         issuedOn > DateOnly.FromDateTime(DateTime.Now) ? throw new ArgumentException("Issued date cannot be in the future.")
-        : isAdvance && issuedOn < serviceOn ? throw new ArgumentException("Issued date cannot be before service date for advance invoice.")
+        : isAdvance && issuedOn > serviceOn ? throw new ArgumentException("Issued date cannot be after service date for advance invoice.")
         : issuedOn;
 }
