@@ -1,14 +1,12 @@
 namespace Gisd.Models;
 
 public class IssuedInvoice(
-    Company issuedTo, DateOnly serviceOn, Currency currency,bool isAdvance,
-    InvoiceNumber number, DateOnly issuedOn)
-    : Invoice(issuedTo, serviceOn, currency, isAdvance)
+    ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
+    Company issuedTo, ServiceDate serviceOn, Currency currency,
+    InvoiceNumber number, IssueDate issuedOn)
+    : Invoice(asValidServiceDate, asValidIssueDate, issuedTo, serviceOn, currency)
 {
     public InvoiceNumber Number { get; } = number;
 
-    public DateOnly IssuedOn { get; } =
-        issuedOn > DateOnly.FromDateTime(DateTime.Now) ? throw new ArgumentException("Issued date cannot be in the future.")
-        : isAdvance && issuedOn > serviceOn ? throw new ArgumentException("Issued date cannot be after service date for advance invoice.")
-        : issuedOn;
+    public DateOnly IssuedOn { get; } = asValidIssueDate(serviceOn, issuedOn);
 }

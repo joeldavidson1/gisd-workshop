@@ -1,17 +1,16 @@
 namespace Gisd.Models;
 
-public abstract class Invoice(Company issuedTo, DateOnly serviceOn, Currency currency, bool isAdvance)
+// Issue #1: Instantiation requires knowledge of concrete strategies (delegates)
+public abstract class Invoice(
+    ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
+    Company issuedTo, ServiceDate serviceOn, Currency currency)
 {
     public Company IssuedTo { get; } = issuedTo;
 
-    public bool IsAdvance { get; } = isAdvance;
-    
-    public virtual DateOnly ServiceOn { get; protected set; } = AsValidServiceDate(serviceOn, isAdvance);
+    public virtual ServiceDate ServiceOn { get; protected set; } = asValidServiceDate(serviceOn);
 
-    protected static DateOnly AsValidServiceDate(DateOnly serviceOn, bool isAdvance) =>
-        serviceOn <= DateOnly.FromDateTime(DateTime.Now) ? serviceOn
-        : isAdvance ? serviceOn
-        : throw new ArgumentException("Service date cannot be in the future.");
+    protected ServiceDateValidator AsValidServiceDate { get; } = asValidServiceDate;
+    protected IssueDateValidator AsValidIssueDate { get; } = asValidIssueDate;
 
     public virtual Currency Currency { get; protected set; } = currency;
 
