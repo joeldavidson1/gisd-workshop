@@ -1,4 +1,6 @@
-namespace Gisd.Models;
+using Gisd.Models.Common;
+
+namespace Gisd.Models.Time;
 
 public delegate IssueDate IssueDateValidator(ServiceDate serviceOn, IssueDate value);
 

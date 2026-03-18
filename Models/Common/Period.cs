@@ -1,4 +1,4 @@
-namespace Gisd.Models;
+namespace Gisd.Models.Common;
 
 public record struct Period(DateOnly From, uint DaysCount)
 {

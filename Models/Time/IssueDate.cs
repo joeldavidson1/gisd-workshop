@@ -1,4 +1,4 @@
-namespace Gisd.Models;
+namespace Gisd.Models.Time;
 
 public record struct IssueDate(DateOnly Value)
 {

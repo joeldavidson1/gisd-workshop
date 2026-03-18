@@ -1,4 +1,7 @@
-namespace Gisd.Models;
+using Gisd.Models.Common;
+using Gisd.Models.Time;
+
+namespace Gisd.Models.Invoicing;
 
 public class InvoiceNumber(Guid companyId, int year, int sequence)
 {

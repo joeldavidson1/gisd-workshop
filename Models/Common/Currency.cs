@@ -1,6 +1,6 @@
-namespace Gisd.Models;
+namespace Gisd.Models.Common;
 
-public class Currency(string symbol)
+public record Currency(string symbol)
 {
     public string Symbol
     {
@@ -10,4 +10,6 @@ public class Currency(string symbol)
             : System.Text.RegularExpressions.Regex.IsMatch(value, @"^[A-Z]{3}$") ? value
             : throw new ArgumentException("Currency must be a valid ISO 4217 currency code.");
     } = symbol;
+
+    public override string ToString() => Symbol;
 }

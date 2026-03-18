@@ -1,6 +1,6 @@
-namespace Gisd.Models;
+namespace Gisd.Models.Common;
 
-public class Money(decimal amount, Currency currency)
+public record Money(decimal amount, Currency currency)
 {
     public decimal Amount
     {
@@ -28,5 +28,5 @@ public class Money(decimal amount, Currency currency)
         return new Money(Amount * factor, Currency);
     }
 
-    public override string ToString() => $"{Amount} {Currency}";
+    public override string ToString() => $"{Amount:N2} {Currency}";
 }

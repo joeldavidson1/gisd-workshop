@@ -1,4 +1,7 @@
 ﻿using Gisd.Models;
+using Gisd.Models.Invoicing;
+using Gisd.Models.Time;
+using Gisd.Models.Common;
 
 // Composition root
 
@@ -13,14 +16,14 @@ IInvoiceFactory invoiceFactory = new ValidatingInvoiceFactory(
 
 // ...
 Invoice draft = InitiateInvoice(invoiceFactory);
-Console.WriteLine(draft.GetType().Name);
+// Console.WriteLine(draft.GetType().Name);
 // persist draft...
 
 // ...
 if (draft is DraftInvoice notIssuedYet)
 {
     Invoice issued = IssueToday(notIssuedYet, new(Guid.NewGuid(), today.Year, 1));
-    Console.WriteLine(issued.GetType().Name);
+    // Console.WriteLine(issued.GetType().Name);
     // persist issued...
 }
 
@@ -31,7 +34,6 @@ Invoice IssueToday(DraftInvoice invoice, InvoiceNumber nextNumber)
 {
     IssueDate issueOn = new(DateOnly.FromDateTime(DateTime.UtcNow));
 
-    // RULE #3: USE DESIGN PRINCIPLES TO MAKE USE OF TYPES SIMPLE AND SAFE
     Invoice issued = invoice.Issue(nextNumber, issueOn);
 
     return issued;
@@ -45,8 +47,27 @@ Invoice InitiateInvoice(IInvoiceFactory invoiceFactory)
     int daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
     ServiceDate endOfMonth = new(new DateOnly(today.Year, today.Month, daysInMonth));
 
-    // RULE #3 (here, too)
     Invoice service = invoiceFactory.CreateDraft(company, endOfMonth, usd);
+    if (service is DraftInvoice draft) AddItems(draft);
 
     return service;
+}
+
+void AddItems(DraftInvoice draft)
+{
+    Currency usd = new("USD");
+    InvoiceItem item1 = new("Something", "Really, something", new Money(1, usd), 1);
+    InvoiceItem item2 = new("Something", "Really, something", new Money(1, usd), 2);
+
+    draft.Add(item1);
+    draft.Add(item2);
+
+    // RULE #4: PROTECT THE INVARIANTS
+    item1.UnitPrice = new Money(1, new Currency("EUR"));
+
+    Console.WriteLine($"Invoice ({draft.Currency}) to {draft.IssuedTo.Name}:");
+    foreach (IReadOnlyInvoiceItem item in draft.Items)
+    {
+        Console.WriteLine($"- {item.Name}: {item.Quantity} x {item.UnitPrice} = {item.TotalPrice}");
+    }
 }

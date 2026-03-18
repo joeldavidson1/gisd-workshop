@@ -1,4 +1,7 @@
-namespace Gisd.Models;
+using Gisd.Models.Common;
+using Gisd.Models.Time;
+
+namespace Gisd.Models.Invoicing;
 
 public class ValidatingInvoiceFactory(
     ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate)

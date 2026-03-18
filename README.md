@@ -111,3 +111,9 @@ In this exercise, we observe the complexity that sneaks into a class implementat
 The solution to this problem is to offload defense to strategies and to the compiler. We choose compile-time analysis every time when there is an option to describe the constraints with types. Let an invalid state impossible via the typed assignment checks.
 
 The remaining verifications and validations can be offloaded to dynamically injected stategies and delegates. The defending class would invoke the strategies to obtain valid state, without knowing what "valid" means in terms of business rules. This coding pattern allows us to inject different concrete strategies depending on the deployment, application request, and other contextual information, while keeping the class implementation complexity at a minimum.
+
+## Lesson 04 - Enforcing Object Validity
+
+One of the principal rules of software design is that every object should be valid on the outset and, if mutable, remain valid after each operation applied to it. Validity violations are sometimes obvious, but sometimes subtle and hard to capture. How can we ensure that the class implementation is correct and safe, then? We can use the idea of class invariants to formalize validity.
+
+A class invariant is a boolean condition that must be true on a new object, and must remain true after each operation on the object. This simple model lets us analyze types, especially the mutable ones, and discover possible runtime issues much easier than by other, more traditional means.

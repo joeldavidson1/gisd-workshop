@@ -1,6 +1,9 @@
-namespace Gisd.Models;
+using Gisd.Models.Common;
+
+namespace Gisd.Models.Invoicing;
 
 public class InvoiceItem(string name, string description, Money unitPrice, decimal quantity)
+    : IReadOnlyInvoiceItem
 {
     public string Name
     {
@@ -28,5 +31,8 @@ public class InvoiceItem(string name, string description, Money unitPrice, decim
             : throw new ArgumentException("Quantity must be greater than zero");
     } = quantity;
 
-    public Money TotalPrice() => UnitPrice.Scale(Quantity);
+    public Money TotalPrice => UnitPrice.Scale(Quantity);
+
+    public InvoiceItem DeepCopy() =>
+        new InvoiceItem(Name, Description, new Money(UnitPrice.Amount, UnitPrice.Currency), Quantity);
 }

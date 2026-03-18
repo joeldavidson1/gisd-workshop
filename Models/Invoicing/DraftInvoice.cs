@@ -1,4 +1,7 @@
-namespace Gisd.Models;
+using Gisd.Models.Common;
+using Gisd.Models.Time;
+
+namespace Gisd.Models.Invoicing;
 
 public class DraftInvoice(
     ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
@@ -10,10 +13,8 @@ public class DraftInvoice(
         ServiceOn = base.AsValidServiceDate(serviceOn);
     }
 
-    public void Add(InvoiceItem item)
-    {
-        base.ItemsRepresentation.Add(item);
-    }
+    public new void Add(InvoiceItem item) =>
+        base.Add(item);
 
     public IssuedInvoice Issue(InvoiceNumber number, IssueDate issuedOn)
     {
