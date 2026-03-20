@@ -3,10 +3,15 @@ using Gisd.Models.Time;
 
 namespace Gisd.Models.Invoicing;
 
+// RULE #5: USE VALUE OBJECTS TO GIVE DOMAIN MEANING TO VALUES
 public abstract class Invoice(
     ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
-    Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency)
+    Invoice.IdType id, Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency)
 {
+    public readonly record struct IdType(Guid Value);
+    
+    public IdType Id { get; } = id;
+
     public Company IssuedBy { get; } = issuedBy;
     public Company IssuedTo { get; } = issuedTo;
 

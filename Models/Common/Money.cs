@@ -1,16 +1,14 @@
 namespace Gisd.Models.Common;
 
-public class Money(decimal amount, Currency currency)
+public record Money(decimal Amount, Currency Currency)
 {
     public decimal Amount
     {
         get => field;
-        set => field =
+        init => field =
             value >= 0 ? value
             : throw new ArgumentException("Amount cannot be negative");
-    } = amount;
-
-    public Currency Currency { get; set; } = currency;
+    } = Amount;
 
     public Money Add(Money other)
     {

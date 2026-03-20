@@ -12,4 +12,16 @@ public class Currency(string symbol)
     } = symbol;
 
     public override string ToString() => Symbol;
+
+    public override bool Equals(object? obj) =>
+        obj is Currency other && Symbol == other.Symbol;
+    
+    public override int GetHashCode() =>
+        Symbol.GetHashCode();
+    
+    public static bool operator ==(Currency left, Currency right) =>
+        left.Equals(right);
+    
+    public static bool operator !=(Currency left, Currency right) =>
+        !(left == right);
 }

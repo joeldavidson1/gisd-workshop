@@ -1,8 +1,12 @@
 namespace Gisd.Models;
 
-public class Company(Guid id, string name)
+public class Company(Company.IdType id, string name)
 {
-    public Guid Id { get; } = id;
+    public readonly record struct IdType(Guid Value);
+
+    public static IdType NewId() => new(Guid.NewGuid());
+    
+    public IdType Id { get; } = id;
 
     public string Name
     {

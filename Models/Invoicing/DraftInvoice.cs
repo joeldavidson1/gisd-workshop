@@ -5,8 +5,8 @@ namespace Gisd.Models.Invoicing;
 
 public class DraftInvoice(
     ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
-    Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency)
-    : Invoice(asValidServiceDate, asValidIssueDate, issuedBy, issuedTo, serviceOn, currency)
+    Invoice.IdType id, Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency)
+    : Invoice(asValidServiceDate, asValidIssueDate, id, issuedBy, issuedTo, serviceOn, currency)
 {
     public void WithServiceDate(ServiceDate serviceOn)
     {
@@ -20,6 +20,6 @@ public class DraftInvoice(
     {
         return new IssuedInvoice(
             base.AsValidServiceDate, base.AsValidIssueDate,
-            base.IssuedBy, base.IssuedTo, base.ServiceOn, base.Currency, number, issuedOn);
+           base.Id, base.IssuedBy, base.IssuedTo, base.ServiceOn, base.Currency, number, issuedOn);
     }
 }

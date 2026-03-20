@@ -5,9 +5,9 @@ namespace Gisd.Models.Invoicing;
 
 public class IssuedInvoice(
     ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
-    Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency,
+    Invoice.IdType id, Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency,
     InvoiceNumber number, IssueDate issuedOn)
-    : Invoice(asValidServiceDate, asValidIssueDate, issuedBy, issuedTo, serviceOn, currency)
+    : Invoice(asValidServiceDate, asValidIssueDate, id, issuedBy, issuedTo, serviceOn, currency)
 {
     public InvoiceNumber Number { get; } =
         number.IssuingCompanyId == issuedBy.Id ? number

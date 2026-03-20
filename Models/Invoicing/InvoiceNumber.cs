@@ -3,13 +3,13 @@ using Gisd.Models.Time;
 
 namespace Gisd.Models.Invoicing;
 
-public class InvoiceNumber(Guid companyId, int year, int sequence)
+public class InvoiceNumber(Company.IdType companyId, int year, int sequence)
 {
-    public Guid IssuingCompanyId
+    public Company.IdType IssuingCompanyId
     {
         get => field;
         set => field =
-            value != Guid.Empty ? value
+            value.Value != Guid.Empty ? value
             : throw new ArgumentException("IssuingCompanyId cannot be empty.");
     } = companyId;
     

@@ -1,9 +1,25 @@
-﻿using Gisd.Models;
+﻿using Gisd.Models.Common;
 using Gisd.Models.Invoicing;
 using Gisd.Models.Time;
-using Gisd.Models.Common;
+using Gisd.Models;
 
-// Composition root
+Money oneDollar = new Money(1.00m, new Currency("USD"));
+Money oneEuro = new Money(1.00m, new Currency("EUR"));
+
+HashSet<Money> wallet = [ oneDollar ];
+
+bool contains = wallet.Contains(new Money(1.00m, new Currency("USD"))); // true
+Console.WriteLine($"Wallet contains one dollar: {contains}");
+
+Console.WriteLine($"{oneDollar} == {oneEuro}: {oneDollar == oneEuro}"); // false
+
+// oneDollar.Currency = new Currency("EUR");
+
+Console.WriteLine($"{oneDollar} == {oneEuro}: {oneDollar == oneEuro}"); // false
+
+Console.WriteLine($"Wallet content: {string.Join(", ", wallet)}"); // Wallet content: 1.00 USD
+contains = wallet.Contains(new Money(1.00m, new Currency("EUR"))); // false (always will be)
+Console.WriteLine($"Wallet contains one euro: {contains}");        // false
 
 DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
 DateOnly monthStart = new DateOnly(today.Year, today.Month, 1);
@@ -14,58 +30,14 @@ IInvoiceFactory invoiceFactory = new ValidatingInvoiceFactory(
     ServiceDateValidator.RegularInvoiceSubscriptionService(),
     IssueDateValidator.RegularInvoicePosting(accountingPeriod, today));
 
-// ...
-Company issuer = new(Guid.NewGuid(), "Our preciousss");
-Invoice draft = InitiateInvoice(issuer, invoiceFactory);
-// persist draft...
+Company.IdType thisCompanyId = Company.NewId();
+Company.IdType otherCompanyId = Company.NewId();
+Invoice.IdType invoiceId = new(Guid.NewGuid());
+ServiceDate serviceDate = new(DateOnly.FromDateTime(DateTime.UtcNow));
+Currency currency = new("USD");
 
-// ...
-if (draft is DraftInvoice notIssuedYet)
-{
-    Invoice issued = IssueToday(notIssuedYet, new(issuer.Id, today.Year, 1));
-    // persist issued...
-}
+Company thisCompany = new(thisCompanyId, "This Company");
+Company otherCompany = new(otherCompanyId, "Other Company");
 
-// ---------------
-// Request handler
-
-Invoice IssueToday(DraftInvoice invoice, InvoiceNumber nextNumber)
-{
-    IssueDate issueOn = new(DateOnly.FromDateTime(DateTime.UtcNow));
-
-    Invoice issued = invoice.Issue(nextNumber, issueOn);
-
-    return issued;
-}
-
-Invoice InitiateInvoice(Company issuer, IInvoiceFactory invoiceFactory)
-{
-    Company recipient = new(Guid.NewGuid(), "Our preciousss client");
-    Currency usd = new("USD");
-    DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
-    int daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
-    ServiceDate endOfMonth = new(new DateOnly(today.Year, today.Month, daysInMonth));
-
-    Invoice service = invoiceFactory.CreateDraft(issuer, recipient, endOfMonth, usd);
-    if (service is DraftInvoice draft) AddItems(draft);
-
-    return service;
-}
-
-void AddItems(DraftInvoice draft)
-{
-    Currency usd = new("USD");
-    InvoiceItem item1 = new("Something", "Really, something", new Money(1, usd), 1);
-    InvoiceItem item2 = new("Something", "Really, something", new Money(1, usd), 2);
-
-    draft.Add(item1);
-    draft.Add(item2);
-
-    item1.UnitPrice = new Money(1, new Currency("EUR"));
-
-    Console.WriteLine($"Invoice ({draft.Currency}) to {draft.IssuedTo.Name}:");
-    foreach (IReadOnlyInvoiceItem item in draft.Items)
-    {
-        Console.WriteLine($"- {item.Name}: {item.Quantity} x {item.UnitPrice} = {item.TotalPrice}");
-    }
-}
+Invoice draftInvoice = invoiceFactory.CreateDraft(
+    invoiceId, thisCompany, otherCompany, serviceDate, currency);
