@@ -117,3 +117,11 @@ The remaining verifications and validations can be offloaded to dynamically inje
 One of the principal rules of software design is that every object should be valid on the outset and, if mutable, remain valid after each operation applied to it. Validity violations are sometimes obvious, but sometimes subtle and hard to capture. How can we ensure that the class implementation is correct and safe, then? We can use the idea of class invariants to formalize validity.
 
 A class invariant is a boolean condition that must be true on a new object, and must remain true after each operation on the object. This simple model lets us analyze types, especially the mutable ones, and discover possible runtime issues much easier than by other, more traditional means.
+
+## Lesson 05 - Using Value Objects
+
+Values are omnipresent in our code. Yet, not all values are the same. Some values are of primitive types: int, string, Guid, etc. Each of these is a value type in C#, which grants it some basic properties. Those include immutability and equality comparison, as two fundamental elements in software engineering. Can we attain the same level of conformance with reference types, too?
+
+The answer is yes, and the method to achieve that is through the design of so-called value objects. A value object can be either a value type or a reference type in C#. What makes it stand apart is that it is immutable, and it implements equality members: Equals, GetHashCode, implements IEquatable generic interface, overloads equality and inequality operators.
+
+Once you design a value object, its use is indistinguishable from the use of a plain number or a string. Modern C# will help you with designing value objects through the use of record classes and record structs. There are a few things to keep in mind to make them perfect, but the main body of work to turn a type into a proper value object would be conducted for you by the compiler.
