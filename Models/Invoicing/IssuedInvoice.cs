@@ -5,11 +5,13 @@ namespace Gisd.Models.Invoicing;
 
 public class IssuedInvoice(
     ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
-    Company issuedTo, ServiceDate serviceOn, Currency currency,
+    Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency,
     InvoiceNumber number, IssueDate issuedOn)
-    : Invoice(asValidServiceDate, asValidIssueDate, issuedTo, serviceOn, currency)
+    : Invoice(asValidServiceDate, asValidIssueDate, issuedBy, issuedTo, serviceOn, currency)
 {
-    public InvoiceNumber Number { get; } = number;
+    public InvoiceNumber Number { get; } =
+        number.IssuingCompanyId == issuedBy.Id ? number
+        : throw new ArgumentException("Invoice number must be issued by the same company as the invoice.");
 
     public DateOnly IssuedOn { get; } = asValidIssueDate(serviceOn, issuedOn);
 }

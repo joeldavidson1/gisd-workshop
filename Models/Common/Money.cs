@@ -1,6 +1,6 @@
 namespace Gisd.Models.Common;
 
-public record Money(decimal amount, Currency currency)
+public class Money(decimal amount, Currency currency)
 {
     public decimal Amount
     {

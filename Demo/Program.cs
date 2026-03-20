@@ -15,15 +15,14 @@ IInvoiceFactory invoiceFactory = new ValidatingInvoiceFactory(
     IssueDateValidator.RegularInvoicePosting(accountingPeriod, today));
 
 // ...
-Invoice draft = InitiateInvoice(invoiceFactory);
-// Console.WriteLine(draft.GetType().Name);
+Company issuer = new(Guid.NewGuid(), "Our preciousss");
+Invoice draft = InitiateInvoice(issuer, invoiceFactory);
 // persist draft...
 
 // ...
 if (draft is DraftInvoice notIssuedYet)
 {
-    Invoice issued = IssueToday(notIssuedYet, new(Guid.NewGuid(), today.Year, 1));
-    // Console.WriteLine(issued.GetType().Name);
+    Invoice issued = IssueToday(notIssuedYet, new(issuer.Id, today.Year, 1));
     // persist issued...
 }
 
@@ -39,15 +38,15 @@ Invoice IssueToday(DraftInvoice invoice, InvoiceNumber nextNumber)
     return issued;
 }
 
-Invoice InitiateInvoice(IInvoiceFactory invoiceFactory)
+Invoice InitiateInvoice(Company issuer, IInvoiceFactory invoiceFactory)
 {
-    Company company = new("Our preciousss client");
+    Company recipient = new(Guid.NewGuid(), "Our preciousss client");
     Currency usd = new("USD");
     DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
     int daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
     ServiceDate endOfMonth = new(new DateOnly(today.Year, today.Month, daysInMonth));
 
-    Invoice service = invoiceFactory.CreateDraft(company, endOfMonth, usd);
+    Invoice service = invoiceFactory.CreateDraft(issuer, recipient, endOfMonth, usd);
     if (service is DraftInvoice draft) AddItems(draft);
 
     return service;
@@ -62,7 +61,6 @@ void AddItems(DraftInvoice draft)
     draft.Add(item1);
     draft.Add(item2);
 
-    // RULE #4: PROTECT THE INVARIANTS
     item1.UnitPrice = new Money(1, new Currency("EUR"));
 
     Console.WriteLine($"Invoice ({draft.Currency}) to {draft.IssuedTo.Name}:");

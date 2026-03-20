@@ -1,7 +1,9 @@
 namespace Gisd.Models;
 
-public class Company(string name)
+public class Company(Guid id, string name)
 {
+    public Guid Id { get; } = id;
+
     public string Name
     {
         get => field;

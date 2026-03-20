@@ -8,13 +8,13 @@ public class ValidatingInvoiceFactory(
     : IInvoiceFactory
 {
     public Invoice CreateDraft(
-        Company issuedTo, ServiceDate serviceOn, Currency currency) =>
-        new DraftInvoice(asValidServiceDate, asValidIssueDate, issuedTo, serviceOn, currency);
+        Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency) =>
+        new DraftInvoice(asValidServiceDate, asValidIssueDate, issuedBy, issuedTo, serviceOn, currency);
 
     public Invoice CreateIssued(
-        Company issuedTo, ServiceDate serviceOn, Currency currency,
+        Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency,
         InvoiceNumber number, IssueDate issuedOn) =>
         new IssuedInvoice(
             asValidServiceDate, asValidIssueDate,
-            issuedTo, serviceOn, currency, number, issuedOn);
+            issuedBy, issuedTo, serviceOn, currency, number, issuedOn);
 }

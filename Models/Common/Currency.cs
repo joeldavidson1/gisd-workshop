@@ -1,6 +1,6 @@
 namespace Gisd.Models.Common;
 
-public record Currency(string symbol)
+public class Currency(string symbol)
 {
     public string Symbol
     {

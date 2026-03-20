@@ -3,13 +3,11 @@ using Gisd.Models.Time;
 
 namespace Gisd.Models.Invoicing;
 
-// Class invariants:
-// 1. Invoice currency the same through all items and invoice itself
-// 2. There can be only one item with same name, description and unit price
 public abstract class Invoice(
     ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
-    Company issuedTo, ServiceDate serviceOn, Currency currency)
+    Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency)
 {
+    public Company IssuedBy { get; } = issuedBy;
     public Company IssuedTo { get; } = issuedTo;
 
     public virtual ServiceDate ServiceOn { get; protected set; } = asValidServiceDate(serviceOn);
