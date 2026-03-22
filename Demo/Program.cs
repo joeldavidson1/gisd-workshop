@@ -36,7 +36,7 @@ IssueDate issueDate = new(today);
 IssuedInvoice issuedInvoice = draftInvoice.Issue(invoiceNumber, issueDate);
 
 Console.WriteLine($"{issuedInvoice.Number.Year}/{issuedInvoice.Number.SequenceNumber} - {issuedInvoice.IssuedTo.Name}");
-foreach (IReadOnlyInvoiceItem item in issuedInvoice.Items)
+foreach (InvoiceItem item in issuedInvoice.Items)
 {
     Console.WriteLine($" - {item.Name}: {item.Quantity} x {item.UnitPrice}");
 }

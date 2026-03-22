@@ -22,25 +22,29 @@ public abstract class Invoice(
     public virtual Currency Currency { get; protected set; } = currency;
 
     private List<InvoiceItem> ItemsRepresentation { get; } = new();
-    public IEnumerable<IReadOnlyInvoiceItem> Items =>
-        ItemsRepresentation.OfType<IReadOnlyInvoiceItem>();
+    public IEnumerable<InvoiceItem> Items => ItemsRepresentation;
 
     protected virtual void Add(InvoiceItem item)
     {
         if (item.UnitPrice.Currency != Currency)
             throw new ArgumentException("Item currency must match invoice currency");
 
-        if (FindExistingItem(item) is InvoiceItem existingItem)
+        int existingItemIndex = FindExistingItem(item);
+        if (existingItemIndex >= 0)
         {
-            existingItem.Quantity += item.Quantity;
+            InvoiceItem existingItem = ItemsRepresentation[existingItemIndex];
+            ItemsRepresentation[existingItemIndex] = existingItem with
+            {
+                Quantity = existingItem.Quantity + item.Quantity
+            };
             return;
         }
 
-        ItemsRepresentation.Add(item.DeepCopy());
+        ItemsRepresentation.Add(item);
     }
 
-    private InvoiceItem? FindExistingItem(InvoiceItem newItem) =>
-        ItemsRepresentation.FirstOrDefault(i =>
+    private int FindExistingItem(InvoiceItem newItem) =>
+        ItemsRepresentation.FindIndex(i =>
             i.Name == newItem.Name &&
             i.Description == newItem.Description &&
             i.UnitPrice == newItem.UnitPrice);

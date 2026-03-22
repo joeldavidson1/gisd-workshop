@@ -2,37 +2,32 @@ using Gisd.Models.Common;
 
 namespace Gisd.Models.Invoicing;
 
-public class InvoiceItem(string name, string description, Money unitPrice, decimal quantity)
-    : IReadOnlyInvoiceItem
+// RULE #6 - FAVOR IMMUTABLE SHARED OBJECTS OVER RECKLESS ENCAPSULATION
+public record InvoiceItem(string Name, string Description, Money UnitPrice, decimal Quantity)
 {
     public string Name
     {
         get => field;
-        set => field = 
+        init => field = 
             !string.IsNullOrWhiteSpace(value) ? value
             : throw new ArgumentException("Item name cannot be empty");
-    } = name;
+    } = Name;
 
     public string Description
     {
         get => field;
-        set => field = 
+        init => field = 
             !string.IsNullOrWhiteSpace(value) ? value
             : throw new ArgumentException("Item description cannot be empty");
-    } = description;
-
-    public Money UnitPrice { get; set; } = unitPrice;
+    } = Description;
 
     public decimal Quantity
     {
         get => field;
-        set => field = 
+        init => field = 
             value > 0 ? value
             : throw new ArgumentException("Quantity must be greater than zero");
-    } = quantity;
+    } = Quantity;
 
     public Money TotalPrice => UnitPrice.Scale(Quantity);
-
-    public InvoiceItem DeepCopy() =>
-        new InvoiceItem(Name, Description, new Money(UnitPrice.Amount, UnitPrice.Currency), Quantity);
 }

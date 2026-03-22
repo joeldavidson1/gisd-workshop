@@ -25,5 +25,5 @@ public class ValidatingInvoiceFactory(
         InvoiceNumber number, IssueDate issuedOn) =>
         new IssuedInvoice(
             asValidServiceDate, asValidIssueDate,
-            id, issuedBy, issuedTo, serviceOn, currency, number, issuedOn);
+            id, issuedBy, issuedTo, serviceOn, currency, number, issuedOn, []);
 }
