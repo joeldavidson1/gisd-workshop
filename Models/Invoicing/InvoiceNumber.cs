@@ -13,7 +13,7 @@ public class InvoiceNumber(Company.IdType companyId, int year, int sequence)
             : throw new ArgumentException("IssuingCompanyId cannot be empty.");
     } = companyId;
     
-    public int InvoiceYear
+    public int Year
     {
         get => field;
         set => field =

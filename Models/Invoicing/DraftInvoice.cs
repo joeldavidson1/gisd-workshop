@@ -20,6 +20,6 @@ public class DraftInvoice(
     {
         return new IssuedInvoice(
             base.AsValidServiceDate, base.AsValidIssueDate,
-           base.Id, base.IssuedBy, base.IssuedTo, base.ServiceOn, base.Currency, number, issuedOn);
+            base.Id, base.IssuedBy, base.IssuedTo, base.ServiceOn, base.Currency, number, issuedOn);
     }
 }

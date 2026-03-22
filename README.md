@@ -125,3 +125,9 @@ Values are omnipresent in our code. Yet, not all values are the same. Some value
 The answer is yes, and the method to achieve that is through the design of so-called value objects. A value object can be either a value type or a reference type in C#. What makes it stand apart is that it is immutable, and it implements equality members: Equals, GetHashCode, implements IEquatable generic interface, overloads equality and inequality operators.
 
 Once you design a value object, its use is indistinguishable from the use of a plain number or a string. Modern C# will help you with designing value objects through the use of record classes and record structs. There are a few things to keep in mind to make them perfect, but the main body of work to turn a type into a proper value object would be conducted for you by the compiler.
+
+## Lesson 06 - Favor Immutable Objects
+
+In this lesson, we are investigating the design limitations when we try to achieve two fundamental goals: Encapsulation, and state evolution. It is common to expect objects to evolve their contained values over time. On the other hand, it is common to protect contained objects via encapsulation. The two concepts clash when encapsulation impedes access to mutable state during an operation that requires that access.
+
+A striking solution to this probelm is to use immutable objects inside a larger object. Encapsulation rules for immutable objects are much easier compared to mutable state. You can freely share immutable objects, even publicly, because nobody can change their state. State evolution happens by instantiating new immutable objects and replacing the old ones. The entire operation still remains safe, in the sense that it is possible to validate all changes and retain encapsulation of mutable structures.
