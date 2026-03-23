@@ -30,13 +30,10 @@ InvoiceItem item2 = new("Something", "Something, really", new Money(1m, usd), 3)
 draftInvoice.Add(item1);
 draftInvoice.Add(item2);
 
-InvoiceNumber invoiceNumber = new(thisCompanyId, today.Year, 19);
-IssueDate issueDate = new(today);
+Console.WriteLine(
+    $"Invoicing {draftInvoice.IssuedTo.Name} [{draftInvoice.Currency}]");
 
-IssuedInvoice issuedInvoice = draftInvoice.Issue(invoiceNumber, issueDate);
-
-Console.WriteLine($"{issuedInvoice.Number.Year}/{issuedInvoice.Number.SequenceNumber} - {issuedInvoice.IssuedTo.Name}");
-foreach (InvoiceItem item in issuedInvoice.Items)
+foreach (InvoiceItem item in draftInvoice.Items)
 {
     Console.WriteLine($" - {item.Name}: {item.Quantity} x {item.UnitPrice}");
 }

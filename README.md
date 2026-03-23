@@ -131,3 +131,9 @@ Once you design a value object, its use is indistinguishable from the use of a p
 In this lesson, we are investigating the design limitations when we try to achieve two fundamental goals: Encapsulation, and state evolution. It is common to expect objects to evolve their contained values over time. On the other hand, it is common to protect contained objects via encapsulation. The two concepts clash when encapsulation impedes access to mutable state during an operation that requires that access.
 
 A striking solution to this probelm is to use immutable objects inside a larger object. Encapsulation rules for immutable objects are much easier compared to mutable state. You can freely share immutable objects, even publicly, because nobody can change their state. State evolution happens by instantiating new immutable objects and replacing the old ones. The entire operation still remains safe, in the sense that it is possible to validate all changes and retain encapsulation of mutable structures.
+
+## Lesson 07 - Use Design by Contract
+
+Design by Contract was introduced by Bertrand Meyer and first explained to a wide audience in his seminal book, Object-Oriented Software Construction. The idea is deceptively simple: define Boolean conditions that must always evaluate to true. Each condition is either a precondition, a postcondition, or a class invariant. A methdod defines preconditions and, whenever the caller satisfies them, the method guarantees to meet postconditions. Class invariants must always be satisfied after the exeuction of any constructor or method.
+
+By defining these formal conditions, class encapsulation becomes a mathematically precise concept that can be turned into executable code. Beyond capturing the virtues of encapsulation, Design by Contract serves as a powerful tool for ensuring overall software correctness and resilience.

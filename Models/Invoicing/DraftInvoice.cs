@@ -13,6 +13,11 @@ public class DraftInvoice(
         ServiceOn = base.AsValidServiceDate(serviceOn);
     }
 
+    public void WithCurrency(Currency currency)
+    {
+        Currency = currency;
+    }
+
     public new void Add(InvoiceItem item) =>
         base.Add(item);
 
