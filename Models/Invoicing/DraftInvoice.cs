@@ -15,6 +15,9 @@ public class DraftInvoice(
 
     public void WithCurrency(Currency currency)
     {
+        if (currency == base.Currency) return;
+        if (base.Items.Any())
+            throw new ArgumentException("All items must have the same currency as the invoice");
         Currency = currency;
     }
 
@@ -26,6 +29,6 @@ public class DraftInvoice(
         return new IssuedInvoice(
             base.AsValidServiceDate, base.AsValidIssueDate,
             base.Id, base.IssuedBy, base.IssuedTo, base.ServiceOn,
-            base.Currency, number, issuedOn, base.Items);
+            base.Currency, number, issuedOn, base.ItemsRepresentation);
     }
 }

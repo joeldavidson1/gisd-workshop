@@ -9,15 +9,14 @@ public class IssuedInvoice : Invoice
         ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
         Invoice.IdType id, Company issuedBy, Company issuedTo,
         ServiceDate serviceOn, Currency currency,
-        InvoiceNumber number, IssueDate issuedOn, IEnumerable<InvoiceItem> items)
+        InvoiceNumber number, IssueDate issuedOn, ItemList items)
         : base(asValidServiceDate, asValidIssueDate, id, issuedBy, issuedTo, serviceOn, currency)
     {
         Number =
             number.IssuingCompanyId == issuedBy.Id ? number
             : throw new ArgumentException("Invoice number must be issued by the same company as the invoice.");
         IssuedOn = asValidIssueDate(serviceOn, issuedOn);
-
-        foreach (InvoiceItem item in items) base.Add(item);
+        ItemsRepresentation = items;
     }
 
     public InvoiceNumber Number { get; }

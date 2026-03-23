@@ -21,31 +21,20 @@ public abstract class Invoice(
 
     public virtual Currency Currency { get; protected set; } = currency;
 
-    private List<InvoiceItem> ItemsRepresentation { get; } = new();
+    protected ItemList ItemsRepresentation
+    {
+        get => field;
+        set => field = 
+            value.Currency is null || value.Currency == Currency ? value
+            : throw new ArgumentException("All items must have the same currency as the invoice");
+    } = new();
+    
     public IEnumerable<InvoiceItem> Items => ItemsRepresentation;
 
     protected virtual void Add(InvoiceItem item)
     {
         if (item.UnitPrice.Currency != Currency)
             throw new ArgumentException("Item currency must match invoice currency");
-
-        int existingItemIndex = FindExistingItem(item);
-        if (existingItemIndex >= 0)
-        {
-            InvoiceItem existingItem = ItemsRepresentation[existingItemIndex];
-            ItemsRepresentation[existingItemIndex] = existingItem with
-            {
-                Quantity = existingItem.Quantity + item.Quantity
-            };
-            return;
-        }
-
         ItemsRepresentation.Add(item);
     }
-
-    private int FindExistingItem(InvoiceItem newItem) =>
-        ItemsRepresentation.FindIndex(i =>
-            i.Name == newItem.Name &&
-            i.Description == newItem.Description &&
-            i.UnitPrice == newItem.UnitPrice);
 }

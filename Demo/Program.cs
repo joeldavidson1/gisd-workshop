@@ -30,6 +30,8 @@ InvoiceItem item2 = new("Something", "Something, really", new Money(1m, usd), 3)
 draftInvoice.Add(item1);
 draftInvoice.Add(item2);
 
+// draftInvoice.WithCurrency(new Currency("EUR"));
+
 Console.WriteLine(
     $"Invoicing {draftInvoice.IssuedTo.Name} [{draftInvoice.Currency}]");
 
