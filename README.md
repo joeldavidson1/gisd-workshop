@@ -126,14 +126,20 @@ The answer is yes, and the method to achieve that is through the design of so-ca
 
 Once you design a value object, its use is indistinguishable from the use of a plain number or a string. Modern C# will help you with designing value objects through the use of record classes and record structs. There are a few things to keep in mind to make them perfect, but the main body of work to turn a type into a proper value object would be conducted for you by the compiler.
 
-## Lesson 06 - Favor Immutable Objects
+## Lesson 06 - Favoring Immutable Objects
 
 In this lesson, we are investigating the design limitations when we try to achieve two fundamental goals: Encapsulation, and state evolution. It is common to expect objects to evolve their contained values over time. On the other hand, it is common to protect contained objects via encapsulation. The two concepts clash when encapsulation impedes access to mutable state during an operation that requires that access.
 
 A striking solution to this probelm is to use immutable objects inside a larger object. Encapsulation rules for immutable objects are much easier compared to mutable state. You can freely share immutable objects, even publicly, because nobody can change their state. State evolution happens by instantiating new immutable objects and replacing the old ones. The entire operation still remains safe, in the sense that it is possible to validate all changes and retain encapsulation of mutable structures.
 
-## Lesson 07 - Use Design by Contract
+## Lesson 07 - Using Design by Contract
 
 Design by Contract was introduced by Bertrand Meyer and first explained to a wide audience in his seminal book, Object-Oriented Software Construction. The idea is deceptively simple: define Boolean conditions that must always evaluate to true. Each condition is either a precondition, a postcondition, or a class invariant. A methdod defines preconditions and, whenever the caller satisfies them, the method guarantees to meet postconditions. Class invariants must always be satisfied after the exeuction of any constructor or method.
 
 By defining these formal conditions, class encapsulation becomes a mathematically precise concept that can be turned into executable code. Beyond capturing the virtues of encapsulation, Design by Contract serves as a powerful tool for ensuring overall software correctness and resilience.
+
+## Lesson 08 - Designing Monadic Types
+
+Monads are the principal tool in functional programming. Despite being object-oriented-first language, C# has a long track record of adopting functional programming concepts, monads included. Built-in types such as `IEnumearble<T>`, `Func<T>`, `Task<T>`, `Nullable<T>`, are all monadic in their nature.
+
+By learning what makes a type to become a monad, and how to effectively employ a monad in code, you will learn much more about object-oriented design. Namely, operations on monads are highly composable, and so they force the programmer to separate a large operation into smaller responsibilities. This lesson will prove once again what many programmers already know: that the best object-oriented code is functional code.
