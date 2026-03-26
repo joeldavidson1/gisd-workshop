@@ -25,8 +25,7 @@ public abstract class Invoice(
     {
         get => field;
         set => field = 
-            value.Currency is null || value.Currency == Currency ? value
-            : throw new ArgumentException("All items must have the same currency as the invoice");
+            value.Currency.Assert(c => c == Currency).Match(_ => value, () => value);
     } = new();
     
     public IEnumerable<InvoiceItem> Items => ItemsRepresentation;

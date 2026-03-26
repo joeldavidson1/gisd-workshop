@@ -6,19 +6,14 @@ namespace Gisd.Models.Invoicing;
 
 public class ItemList : IEnumerable<InvoiceItem>
 {
-    public Currency? Currency =>
-        Items.FirstOrDefault()?.UnitPrice.Currency;
-    
-    [MemberNotNullWhen(true, nameof(Currency))]
-    public bool HasItems =>
-        Items.Any();
+    public Option<Currency> Currency =>
+        Items.FirstOrNone().Map(item => item.UnitPrice.Currency);
 
     private List<InvoiceItem> Items { get; } = new();
 
     public void Add(InvoiceItem item)
     {
-        if (Currency is not null && item.UnitPrice.Currency != Currency)
-            throw new ArgumentException("All items must have the same currency");
+        _ = Currency.Assert(c => c == item.UnitPrice.Currency);
 
         int existingItemIndex = FindExistingItem(item);
         if (existingItemIndex >= 0)
