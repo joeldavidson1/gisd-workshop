@@ -21,5 +21,5 @@ public class IssuedInvoice : Invoice
 
     public InvoiceNumber Number { get; }
 
-    public DateOnly IssuedOn { get; }
+    public IssueDate IssuedOn { get; }
 }

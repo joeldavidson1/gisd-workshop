@@ -143,3 +143,11 @@ By defining these formal conditions, class encapsulation becomes a mathematicall
 Monads are the principal tool in functional programming. Despite being object-oriented-first language, C# has a long track record of adopting functional programming concepts, monads included. Built-in types such as `IEnumearble<T>`, `Func<T>`, `Task<T>`, `Nullable<T>`, are all monadic in their nature.
 
 By learning what makes a type to become a monad, and how to effectively employ a monad in code, you will learn much more about object-oriented design. Namely, operations on monads are highly composable, and so they force the programmer to separate a large operation into smaller responsibilities. This lesson will prove once again what many programmers already know: that the best object-oriented code is functional code.
+
+## Lesson 09 - Doing Embarrassingly Immutable Design
+
+By advancing the previous designs even futher, we reach a world where state never changes, and invalidity is quite literally unrepresentable. We learn to stop apologizing for the memory overhead of new objects, to see how trivial our most complex logic becomes when we stop managing side effects.
+
+By applying these principles to the entire domain model, you will witness a "magic trick" of software engineering: half of the codebase will simply evaporate. The defensive guards, the null checks, the synchronization locks, the "dirty" flags that clutter modern enterprise code, all are revealed as unnecessary baggage in a deeply immutable design.
+
+This lesson proves that when you move validation to the gates of construction and transitions to pure monadic functions, the resulting code isn't just better. It becomes embarrassingly simple.

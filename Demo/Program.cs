@@ -1,32 +1,43 @@
-﻿using Gisd.Models.Common;
+﻿using Gisd.Models;
+using Gisd.Models.Common;
+using Gisd.Models.Invoicing;
+using Gisd.Models.Time;
 
-// MONAD
+DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
+DateOnly monthStart = new DateOnly(today.Year, today.Month, 1);
+uint daysInMonth = (uint)DateTime.DaysInMonth(today.Year, today.Month);
+Period accountingPeriod = new(monthStart, daysInMonth);
 
-// Operations:
-// 1. Unit: A -> M A
-// 2. Bind: M A -> (A -> M B) -> M B
-// 3. Map: M A -> (A -> B) -> M B (in terms of Unit and Bind: Map m f = Bind m (x => Unit (f x)))
+ValidatingInvoiceFactory invoiceFactory = new ValidatingInvoiceFactory(
+    ServiceDateValidator.RegularInvoiceSubscriptionService(),
+    IssueDateValidator.RegularInvoicePosting(accountingPeriod, today));
 
-// Example:
+Company.IdType thisCompanyId = Company.NewId();
+Company.IdType otherCompanyId = Company.NewId();
+Invoice.IdType invoiceId = new(Guid.NewGuid());
+ServiceDate serviceDate = new(DateOnly.FromDateTime(DateTime.UtcNow));
+Currency usd = new("USD");
 
-Func<string, string> transform = s =>
-    s.NullableUnit().BindNullable(toUpper).MapNullable(explain).MatchNullable(s => s, () => "<null>");
+Company thisCompany = new(thisCompanyId, "This Company");
+Company otherCompany = new(otherCompanyId, "Other Company");
 
-Console.WriteLine(transform("Hello, World!"));
-Console.WriteLine(transform("hi, there!"));
-Console.WriteLine(transform(""));
+InvoiceItem item1 = new("Something", "Something, really", new Money(1m, usd), 2);
+InvoiceItem item2 = new("Else", "Nothing, really", new Money(2m, usd), 4);
+InvoiceItem item3 = new("Something", "Something, really", new Money(1m, usd), 3);
+InvoiceItem item4 = new("Something", "Something, really", new Money(2m, usd), 1);
 
-IEnumerable<string> lines = ["Hello, World!", "hi, there!", ""];
-string report = lines.Bind(s => s.Split()).Map(transform).Join(Environment.NewLine);
+DraftInvoice draftInvoice = invoiceFactory.CreateDraft(
+    invoiceId, thisCompany, otherCompany, serviceDate, usd);
 
-Console.WriteLine();
-Console.WriteLine(report);
+draftInvoice.Add(item1);
+draftInvoice.Add(item2);
+draftInvoice.Add(item3);
+draftInvoice.Add(item4);
 
-string? toUpper(string str) =>
-    str == string.Empty ? string.Empty
-    : char.IsLower(str[0]) ? null
-    : str.ToUpper();
+Console.WriteLine(
+    $"Invoicing {draftInvoice.IssuedTo.Name} [{draftInvoice.Currency}]");
 
-string explain(string str) =>
-    str == string.Empty ? "<empty>"
-    : $"{str.Length} characters";
+foreach (InvoiceItem item in draftInvoice.Items)
+{
+    Console.WriteLine($" - {item.Name}: {item.Quantity} x {item.UnitPrice}");
+}

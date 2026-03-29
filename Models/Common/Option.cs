@@ -4,12 +4,11 @@ public abstract record Option<T>;
 public record Some<T>(T Value) : Option<T>;
 public record None<T>() : Option<T>;
 
-// RULE #8 - USE MONADS TO CAPTURE RESPONSIBILITIES (E.G. EXISTENCE CHECK)
 public static class Optional
 {
     extension<T>(T value)
     {
-        public Option<T> AsSome() =>
+        public Option<T> AsOption() =>
             new Some<T>(value);
         
         public static None<T> None() =>
@@ -20,38 +19,44 @@ public static class Optional
     {
         public Option<U> Bind<U>(Func<T, Option<U>> f) => option switch
         {
-            T some => f(some),
+            Some<T> some => f(some.Value),
             _ => new None<U>()
         };
 
         public Option<U> Map<U>(Func<T, U> f) => option switch
         {
-            T some => new Some<U>(f(some)),
+            Some<T> some => new Some<U>(f(some.Value)),
             _ => new None<U>()
         };
 
         public R Match<R>(Func<T, R> onSome, Func<R> onNone) => option switch
         {
-            T some => onSome(some),
+            Some<T> some => onSome(some.Value),
             _ => onNone()
         };
 
         public T OrElse(T @default) => option switch
         {
-            T some => some,
+            Some<T> some => some.Value,
             _ => @default
+        };
+
+        public T OrElse(Func<T> defaultFactory) => option switch
+        {
+            Some<T> some => some.Value,
+            _ => defaultFactory()
         };
 
         public Option<T> When(Func<T, bool> predicate) => option switch
         {
-            T some when predicate(some) => new Some<T>(some),
+            Some<T> some when predicate(some.Value) => some,
             _ => new None<T>()
         };
 
         public Option<T> Assert(Func<T, bool> predicate) => option switch
         {
-            T some when predicate(some) => option,
-            T _ => throw new ArgumentException("Option value does not satisfy the assertion"),
+            Some<T> some when predicate(some.Value) => option,
+            Some<T> _ => throw new ArgumentException("Option value does not satisfy the assertion"),
             _ => option
         };
     }
