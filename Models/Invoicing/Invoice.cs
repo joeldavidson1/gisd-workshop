@@ -3,7 +3,6 @@ using Gisd.Models.Time;
 
 namespace Gisd.Models.Invoicing;
 
-// RULE #9 - IMPLEMENT DEEPLY IMMUTABLE MODELS TO KEEP INVARIANTS AND MAKE SHORTER CODE
 public abstract record Invoice(
     ServiceDateValidator AsValidServiceDate, IssueDateValidator AsValidIssueDate,
     Invoice.IdType Id, Company IssuedBy, Company IssuedTo, ServiceDate ServiceOn, Currency Currency, ItemList Items)

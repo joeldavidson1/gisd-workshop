@@ -151,3 +151,9 @@ By advancing the previous designs even futher, we reach a world where state neve
 By applying these principles to the entire domain model, you will witness a "magic trick" of software engineering: half of the codebase will simply evaporate. The defensive guards, the null checks, the synchronization locks, the "dirty" flags that clutter modern enterprise code, all are revealed as unnecessary baggage in a deeply immutable design.
 
 This lesson proves that when you move validation to the gates of construction and transitions to pure monadic functions, the resulting code isn't just better. It becomes embarrassingly simple.
+
+## Lesson 10 - Manage the Separation of Concerns
+
+Once a business model is developed, it is all too easy to continue adding responsibilities into it. We must resist this urge and decide where to make a cut. Additional responsibilities would end up in new types, sometimes entire hierarchies of types. New classes might reference the old ones, making it one giant business model but still, each individual type would hold only one responsibility, if possible.
+
+The resulting model separates types into distinct namespaces/packages, so that each namespace groups types related by around common responsibility. This strategy opens the opportunity to separate entire responsibilities into individual projects. This level of flexibility is impossible in designs where one domain class is managing several responsibilities.

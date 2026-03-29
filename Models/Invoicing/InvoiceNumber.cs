@@ -3,7 +3,7 @@ using Gisd.Models.Time;
 
 namespace Gisd.Models.Invoicing;
 
-public class InvoiceNumber(Company.IdType companyId, int year, int sequence)
+public class InvoiceNumber(Company.IdType CompanyId, int Year, int Sequence)
 {
     public Company.IdType IssuingCompanyId
     {
@@ -11,7 +11,7 @@ public class InvoiceNumber(Company.IdType companyId, int year, int sequence)
         set => field =
             value.Value != Guid.Empty ? value
             : throw new ArgumentException("IssuingCompanyId cannot be empty.");
-    } = companyId;
+    } = CompanyId;
     
     public int Year
     {
@@ -19,13 +19,13 @@ public class InvoiceNumber(Company.IdType companyId, int year, int sequence)
         set => field =
             value > 0 ? value
             : throw new ArgumentException("InvoiceYear must be a positive integer.");
-    } = year;
+    } = Year;
    
-    public int SequenceNumber
+    public int Sequence
     {
         get => field;
         set => field =
             value > 0 ? value
             : throw new ArgumentException("SequenceNumber must be a positive integer.");
-    } = sequence;
+    } = Sequence;
 }
