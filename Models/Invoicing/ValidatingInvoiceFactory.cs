@@ -13,17 +13,17 @@ public class ValidatingInvoiceFactory(
 
     public DraftInvoice CreateDraft(
         Invoice.IdType id, Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency) =>
-        new DraftInvoice(asValidServiceDate, asValidIssueDate, id, issuedBy, issuedTo, serviceOn, currency);
+        new DraftInvoice(asValidServiceDate, asValidIssueDate, id, issuedBy, issuedTo, serviceOn, currency, []);
 
     Invoice IInvoiceFactory.CreateIssued(
         Invoice.IdType id, Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency,
-        InvoiceNumber number, IssueDate issuedOn) =>
-        this.CreateIssued(id, issuedBy, issuedTo, serviceOn, currency, number, issuedOn);
+        ItemList items, InvoiceNumber number, IssueDate issuedOn) =>
+        this.CreateIssued(id, issuedBy, issuedTo, serviceOn, currency, items, number, issuedOn);
 
     public IssuedInvoice CreateIssued(
         Invoice.IdType id, Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency,
-        InvoiceNumber number, IssueDate issuedOn) =>
+        ItemList items, InvoiceNumber number, IssueDate issuedOn) =>
         new IssuedInvoice(
             asValidServiceDate, asValidIssueDate,
-            id, issuedBy, issuedTo, serviceOn, currency, number, issuedOn, []);
+            id, issuedBy, issuedTo, serviceOn, currency, items, number, issuedOn);
 }

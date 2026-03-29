@@ -3,23 +3,17 @@ using Gisd.Models.Time;
 
 namespace Gisd.Models.Invoicing;
 
-public class IssuedInvoice : Invoice
+public record IssuedInvoice(
+    ServiceDateValidator AsValidServiceDate, IssueDateValidator AsValidIssueDate,
+    Invoice.IdType Id, Company IssuedBy, Company IssuedTo,
+    ServiceDate ServiceOn, Currency Currency, ItemList Items,
+    InvoiceNumber Number, IssueDate IssuedOn)
+    : Invoice(AsValidServiceDate, AsValidIssueDate, Id, IssuedBy, IssuedTo, ServiceOn, Currency, Items)
 {
-    public IssuedInvoice(
-        ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
-        Invoice.IdType id, Company issuedBy, Company issuedTo,
-        ServiceDate serviceOn, Currency currency,
-        InvoiceNumber number, IssueDate issuedOn, ItemList items)
-        : base(asValidServiceDate, asValidIssueDate, id, issuedBy, issuedTo, serviceOn, currency)
-    {
-        Number =
-            number.IssuingCompanyId == issuedBy.Id ? number
-            : throw new ArgumentException("Invoice number must be issued by the same company as the invoice.");
-        IssuedOn = asValidIssueDate(serviceOn, issuedOn);
-        ItemsRepresentation = items;
-    }
+    public InvoiceNumber Number { get; } =
+        Number.IssuingCompanyId == IssuedBy.Id ? Number
+        : throw new ArgumentException("Invoice number must be issued by the same company as the invoice.");
 
-    public InvoiceNumber Number { get; }
-
-    public IssueDate IssuedOn { get; }
+    public IssueDate IssuedOn { get; } =
+        AsValidIssueDate(ServiceOn, IssuedOn);
 }

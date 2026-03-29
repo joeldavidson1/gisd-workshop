@@ -9,5 +9,5 @@ public interface IInvoiceFactory
         Invoice.IdType id, Company issuedBy,Company issuedTo, ServiceDate serviceOn, Currency currency);
     Invoice CreateIssued(
         Invoice.IdType id, Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency,
-        InvoiceNumber number, IssueDate issuedOn);
+        ItemList items, InvoiceNumber number, IssueDate issuedOn);
 }

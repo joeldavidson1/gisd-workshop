@@ -3,37 +3,20 @@ using Gisd.Models.Time;
 
 namespace Gisd.Models.Invoicing;
 
-public abstract class Invoice(
-    ServiceDateValidator asValidServiceDate, IssueDateValidator asValidIssueDate,
-    Invoice.IdType id, Company issuedBy, Company issuedTo, ServiceDate serviceOn, Currency currency)
+// RULE #9 - IMPLEMENT DEEPLY IMMUTABLE MODELS TO KEEP INVARIANTS AND MAKE SHORTER CODE
+public abstract record Invoice(
+    ServiceDateValidator AsValidServiceDate, IssueDateValidator AsValidIssueDate,
+    Invoice.IdType Id, Company IssuedBy, Company IssuedTo, ServiceDate ServiceOn, Currency Currency, ItemList Items)
 {
     public readonly record struct IdType(Guid Value);
-    
-    public IdType Id { get; } = id;
 
-    public Company IssuedBy { get; } = issuedBy;
-    public Company IssuedTo { get; } = issuedTo;
+    public Invoice.IdType Id { get; } = Id;
 
-    public virtual ServiceDate ServiceOn { get; protected set; } = asValidServiceDate(serviceOn);
+    public Company IssuedBy { get; protected init; } = IssuedBy;
+    public Company IssuedTo { get; protected init; } = IssuedTo;
 
-    protected ServiceDateValidator AsValidServiceDate { get; } = asValidServiceDate;
-    protected IssueDateValidator AsValidIssueDate { get; } = asValidIssueDate;
+    public ServiceDate ServiceOn { get; protected init; } = AsValidServiceDate(ServiceOn);
 
-    public virtual Currency Currency { get; protected set; } = currency;
-
-    protected ItemList ItemsRepresentation
-    {
-        get => field;
-        set => field = 
-            value.Currency.Assert(c => c == Currency).Match(_ => value, () => value);
-    } = new();
-    
-    public IEnumerable<InvoiceItem> Items => ItemsRepresentation;
-
-    protected virtual void Add(InvoiceItem item)
-    {
-        if (item.UnitPrice.Currency != Currency)
-            throw new ArgumentException("Item currency must match invoice currency");
-        ItemsRepresentation.Add(item);
-    }
+    public Currency Currency { get; protected init; } = Items.Currency.Assert(c => c == Currency).OrElse(Currency);
+    public ItemList Items { get; protected init; } = Items.Currency.Assert(c => c == Currency).Match(_ => Items, () => Items);
 }

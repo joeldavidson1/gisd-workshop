@@ -26,18 +26,23 @@ InvoiceItem item2 = new("Else", "Nothing, really", new Money(2m, usd), 4);
 InvoiceItem item3 = new("Something", "Something, really", new Money(1m, usd), 3);
 InvoiceItem item4 = new("Something", "Something, really", new Money(2m, usd), 1);
 
-DraftInvoice draftInvoice = invoiceFactory.CreateDraft(
-    invoiceId, thisCompany, otherCompany, serviceDate, usd);
+InvoiceNumber invoiceNumber = new(thisCompanyId, today.Year, 19);
+IssueDate issueDate = new(today);
 
-draftInvoice.Add(item1);
-draftInvoice.Add(item2);
-draftInvoice.Add(item3);
-draftInvoice.Add(item4);
+IssuedInvoice invoice = invoiceFactory
+    .CreateDraft(invoiceId, thisCompany, otherCompany, serviceDate, usd)
+    .WithCurrency(new Currency("EUR"))
+    .WithCurrency(usd)
+    .Add(item1)
+    .Add(item2)
+    .Add(item3)
+    .Add(item4)
+    .Issue(invoiceNumber, issueDate);
 
 Console.WriteLine(
-    $"Invoicing {draftInvoice.IssuedTo.Name} [{draftInvoice.Currency}]");
+    $"Invoicing {invoice.IssuedTo.Name} [{invoice.Currency}]");
 
-foreach (InvoiceItem item in draftInvoice.Items)
+foreach (InvoiceItem item in invoice.Items)
 {
     Console.WriteLine($" - {item.Name}: {item.Quantity} x {item.UnitPrice}");
 }

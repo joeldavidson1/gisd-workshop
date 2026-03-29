@@ -28,5 +28,8 @@ public record InvoiceItem(string Name, string Description, Money UnitPrice, deci
             : throw new ArgumentException("Quantity must be greater than zero");
     } = Quantity;
 
+    public InvoiceItem AddQuantity(decimal additionalQuantity) =>
+        this with { Quantity = Quantity + additionalQuantity };
+
     public Money TotalPrice => UnitPrice.Scale(Quantity);
 }
