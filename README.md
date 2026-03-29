@@ -144,7 +144,7 @@ Monads are the principal tool in functional programming. Despite being object-or
 
 By learning what makes a type to become a monad, and how to effectively employ a monad in code, you will learn much more about object-oriented design. Namely, operations on monads are highly composable, and so they force the programmer to separate a large operation into smaller responsibilities. This lesson will prove once again what many programmers already know: that the best object-oriented code is functional code.
 
-## Lesson 09 - Doing Embarrassingly Immutable Design
+## Lesson 09 - Doing Embarrassingly Simple Design
 
 By advancing the previous designs even futher, we reach a world where state never changes, and invalidity is quite literally unrepresentable. We learn to stop apologizing for the memory overhead of new objects, to see how trivial our most complex logic becomes when we stop managing side effects.
 
