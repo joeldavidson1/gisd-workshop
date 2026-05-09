@@ -16,3 +16,4 @@ public class Company(Company.IdType id, string name)
             : throw new ArgumentException("CustomerName cannot be null or whitespace.");
     } = name;
 }
+// Test
