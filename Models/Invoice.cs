@@ -7,3 +7,5 @@ public class Invoice(string number, string customerName, DateOnly invoicedOn, st
     public DateOnly InvoicedOn { get; set; } = invoicedOn;
     public string Currency { get; set; } = currency;
 }
+
+// Test comment for my solution
